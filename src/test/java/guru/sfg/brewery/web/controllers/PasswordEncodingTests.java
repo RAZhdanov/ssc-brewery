@@ -15,6 +15,12 @@ public class PasswordEncodingTests {
 
     static final String PASSWORD = "password";
 
+    //What happens if you use a higher value for strength?
+    //
+    // The computational cost becomes exponentially higher,
+    // thus taking longer to calculate hash.
+    // This can be used to deter brute force attacks by reducing the number of calculations
+    // which can be performed in a given time span.
     @Test
     void testBCrypt15() {
         PasswordEncoder bcrypt15 = new BCryptPasswordEncoder(15);
