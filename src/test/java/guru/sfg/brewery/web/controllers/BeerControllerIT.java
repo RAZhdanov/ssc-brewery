@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -25,7 +26,14 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 @WebMvcTest
 public class BeerControllerIT extends BaseIT {
 
-    @WithMockUser(value = "spring")
+    @Test
+    void initCreationForm() throws Exception {
+        mockMvc.perform(get("/beers/new").with(httpBasic("user", "password")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("beers/createBeer"))
+                .andExpect(model().attributeExists("beer"));
+    }
+
     @Test
     void findBeersSuccess() throws Exception {
         mockMvc.perform(get("/beers/find"))
@@ -35,11 +43,12 @@ public class BeerControllerIT extends BaseIT {
     }
 
     @Test
-    void findBeersWithHttpBasic() throws Exception {
+    void findBeersWithAnonymous() throws Exception {
         mockMvc.perform(
                     get("/beers/find")
                         //.header("Authorization", "Basic c3ByaW5nOmd1cnU=")
-                    .with(httpBasic("spring", "guru"))
+                    //.with(httpBasic("spring", "guru"))
+                            .with(anonymous())
                 )
                 .andExpect(status().isOk())
                 .andExpect(view().name("beers/findBeers"))
