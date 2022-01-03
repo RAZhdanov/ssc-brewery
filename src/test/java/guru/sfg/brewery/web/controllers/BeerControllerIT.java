@@ -23,35 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
 @WebMvcTest
-public class BeerControllerIT {
-
-    @Autowired
-    private WebApplicationContext wac;
-
-    private MockMvc mockMvc;
-
-    @MockBean
-    private BeerRepository beerRepository;
-
-    @MockBean
-    private BeerInventoryRepository beerInventoryRepository;
-
-    @MockBean
-    private BreweryService breweryService;
-
-    @MockBean
-    private CustomerRepository customerRepository;
-
-    @MockBean
-    private BeerService beerService;
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders
-                .webAppContextSetup(wac)
-                .apply(SecurityMockMvcConfigurers.springSecurity())
-                .build();
-    }
+public class BeerControllerIT extends BaseIT {
 
     @WithMockUser(value = "spring")
     @Test
