@@ -1,6 +1,8 @@
 package guru.sfg.brewery.web.controllers;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
@@ -8,6 +10,13 @@ import java.nio.charset.StandardCharsets;
 public class PasswordEncodingTests {
 
     static final String PASSWORD = "password";
+
+    @Test
+    void testNoOp() {
+        PasswordEncoder noOp = NoOpPasswordEncoder.getInstance();
+
+        System.out.println(noOp.encode(PASSWORD));
+    }
 
     @Test
     //It is not recommended for password use
