@@ -3,11 +3,12 @@ package guru.sfg.brewery.web.controllers.api;
 import guru.sfg.brewery.web.controllers.BaseIT;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-@WebMvcTest
+@SpringBootTest
 public class BeerRestControllerIT extends BaseIT {
 
     @Test
