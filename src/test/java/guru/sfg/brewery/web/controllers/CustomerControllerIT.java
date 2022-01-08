@@ -16,26 +16,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class CustomerControllerIT extends BaseIT {
 
-    @ParameterizedTest(name = "#{index} with [{arguments}]")
-    @MethodSource("guru.sfg.brewery.web.controllers.BeerControllerIT#getStreamAdminCustomer")
-    void testListCustomersAUTH(String user, String password) throws Exception {
-        mockMvc.perform(
-          get("/customers").with(httpBasic(user, password))
-        ).andExpect(status().isOk());
-    }
+    @DisplayName("List Customers")
+    @Nested
+    class ListCustomers{
+        @ParameterizedTest(name = "#{index} with [{arguments}]")
+        @MethodSource("guru.sfg.brewery.web.controllers.BeerControllerIT#getStreamAdminCustomer")
+        void testListCustomersAUTH(String user, String pwd) throws Exception {
+            mockMvc.perform(get("/customers")
+                    .with(httpBasic(user, pwd)))
+                    .andExpect(status().isOk());
 
-    @Test
-    void testListCustomersNOTAUTH() throws Exception {
-        mockMvc.perform(
-          get("/customers").with(httpBasic("user", "password"))
-        ).andExpect(status().isForbidden());
-    }
+        }
 
-    @Test
-    void testListCustomersNOTLOGGEDIN() throws Exception {
-        mockMvc.perform(
-                get("/customers")
-        ).andExpect(status().isUnauthorized());
+        @Test
+        void testListCustomersNOTAUTH() throws Exception {
+            mockMvc.perform(get("/customers")
+                    .with(httpBasic("user", "password")))
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
+        void testListCustomersNOTLOGGEDIN() throws Exception {
+            mockMvc.perform(get("/customers"))
+                    .andExpect(status().isUnauthorized());
+
+        }
     }
 
     @DisplayName("Add Customers")
@@ -44,33 +49,29 @@ public class CustomerControllerIT extends BaseIT {
 
         @Rollback
         @Test
-        void processCreationForm() throws Exception {
-            mockMvc.perform(
-              post("/customers/new")
-                      .param("customerName", "Foo Customer")
-                      .with(httpBasic("spring", "guru"))
-            ).andExpect(status().is3xxRedirection());
+        void processCreationForm() throws Exception{
+            mockMvc.perform(post("/customers/new")
+                    .param("customerName", "Foo Customer")
+                    .with(httpBasic("spring", "guru")))
+                    .andExpect(status().is3xxRedirection());
         }
 
         @Rollback
         @ParameterizedTest(name = "#{index} with [{arguments}]")
         @MethodSource("guru.sfg.brewery.web.controllers.BeerControllerIT#getStreamNotAdmin")
-        void processCreationFormNOTAUTH(String user, String password) throws Exception {
-            mockMvc.perform(
-                    post("/customers/new")
-                            .param("customerName", "Foo Customer2")
-                            .with(httpBasic(user, password))
-            ).andExpect(status().isForbidden());
+        void processCreationFormNOTAUTH(String user, String pwd) throws Exception{
+            mockMvc.perform(post("/customers/new")
+                    .param("customerName", "Foo Customer2")
+                    .with(httpBasic(user, pwd)))
+                    .andExpect(status().isForbidden());
         }
 
         @Test
-        void processCreationFormNOAUTH() throws Exception {
-            mockMvc.perform(
-                    post("/customers/new")
-                            .param("customerName", "Foo Customer")
-            ).andExpect(status().isUnauthorized());
+        void processCreationFormNOAUTH() throws Exception{
+            mockMvc.perform(post("/customers/new")
+                    .param("customerName", "Foo Customer"))
+                    .andExpect(status().isUnauthorized());
         }
-
     }
 
 }

@@ -18,6 +18,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Created by jt on 6/22/20.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -49,7 +52,7 @@ public class JpaUserDetailsService implements UserDetailsService {
     private Collection<? extends GrantedAuthority> convertToSpringAuthorities(Set<Authority> authorities) {
         if (authorities != null && authorities.size() > 0){
             return authorities.stream()
-                    .map(Authority::getRole)
+                    .map(Authority::getPermission)
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toSet());
         } else {
